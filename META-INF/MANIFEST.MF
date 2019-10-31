@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Logs
+Bundle-SymbolicName: com.lhq.plugin.mybatis.logs;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: LHQ
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.ui.console;bundle-version="3.7.1",
+ org.eclipse.jface.text;bundle-version="3.12.2"
+Automatic-Module-Name: com.lhq.plugin.mybatis.logs
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
