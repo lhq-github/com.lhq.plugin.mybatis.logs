@@ -62,7 +62,9 @@ public class DocumentListener implements IDocumentListener {
             if (line.contains(preparing2)) {
                 cache.put(preparing2, line.split(preparing2)[1].trim());
             } else if (line.contains(parameters2)) {
-                cache.put(parameters2, line.split(parameters2)[1].trim());
+                if (line.split(parameters2).length > 1) {
+                    cache.put(parameters2, line.split(parameters2)[1].trim());
+                }
             } else if (line.contains(types)) {
                 this.printIBatisSql();
             }
@@ -74,7 +76,7 @@ public class DocumentListener implements IDocumentListener {
      */
     private void printMyBatisSql() {
         if (cache.get(preparing1) != null && cache.get(parameters1) != null && cache.get(total) != null) {
-            List<String> params = Arrays.asList(cache.get(parameters1).split(","));
+            List<String> params = Arrays.asList(cache.get(parameters1).split(", "));
 
             for (String param : params) {
                 param = param.trim().replaceAll("\\(\\w+\\)", "");
@@ -98,7 +100,7 @@ public class DocumentListener implements IDocumentListener {
         if (cache.get(preparing2) != null && cache.get(parameters2) != null) {
             String parameters = cache.get(parameters2);
             parameters = parameters.substring(1, parameters.length() - 1);
-            List<String> params = Arrays.asList(parameters.split(","));
+            List<String> params = Arrays.asList(parameters.split(", "));
 
             for (String param : params) {
                 param = param.trim().replaceAll("\\(\\w+\\)", "");
