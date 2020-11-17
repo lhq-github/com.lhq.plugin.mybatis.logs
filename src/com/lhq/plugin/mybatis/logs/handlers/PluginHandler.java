@@ -9,6 +9,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.lhq.plugin.mybatis.logs.console.EclipseOutput;
 import com.lhq.plugin.mybatis.logs.toolkits.LogsToolkit;
 
 public class PluginHandler extends AbstractHandler {
@@ -26,6 +27,7 @@ public class PluginHandler extends AbstractHandler {
                 ISelection selection = view.getViewSite().getSelectionProvider().getSelection();
                 if (selection instanceof TextSelection) {
                     TextSelection text = (TextSelection) selection;
+                    LogsToolkit.setOutput(EclipseOutput.output);
                     LogsToolkit.parseText(text.getText());
                 }
             }

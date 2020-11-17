@@ -7,12 +7,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.lhq.plugin.mybatis.logs.console.CurrentConsole;
+import com.lhq.plugin.mybatis.logs.console.Output;
 
 public class LogsToolkit {
 
     private LogsToolkit() {
     }
+
+    private static Output output;
 
     // MyBatis
     private static final String preparing1 = " ==>  Preparing: ";
@@ -21,6 +23,7 @@ public class LogsToolkit {
     private static final String preparing2 = " Executing Statement: ";
     private static final String parameters2 = " Parameters: ";
 
+    private static final String NULL_STR = "@@NULL@@";
     private static Map<String, String> cache = new HashMap<String, String>();
 
     public static void parseText(String text) {
@@ -73,6 +76,7 @@ public class LogsToolkit {
             List<String> params = new ArrayList<String>();
             if (!"".equals(parameters)) {
                 parameters += ", ";
+                parameters = parameters.replaceAll("null, ", NULL_STR + "(String), ");// 对null字符串特殊处理
                 params.addAll(Arrays.asList(parameters.split("\\(\\w+\\), ")));
             }
 
@@ -80,7 +84,11 @@ public class LogsToolkit {
             while (it.hasNext()) {
                 String param = it.next();
                 if (cache.get(preparing1).contains("?")) {
-                    cache.put(preparing1, cache.get(preparing1).replaceFirst("\\?", "'" + param + "'"));
+                    if (NULL_STR.equals(param)) {
+                        cache.put(preparing1, cache.get(preparing1).replaceFirst("\\?", "null"));
+                    } else {
+                        cache.put(preparing1, cache.get(preparing1).replaceFirst("\\?", "'" + param + "'"));
+                    }
                     it.remove();
                 }
             }
@@ -92,8 +100,7 @@ public class LogsToolkit {
                 buffer.append("注意：由于SQL中某一项参数中包含“(\\w+), ”使其被解析成多个参数，导致最终多出部分参数: " + params.toString() + "\n");
             }
             buffer.append("------------------------------------------------------------------------\n");
-            // System.out.println(buffer.toString());
-            CurrentConsole.println(buffer.toString());
+            output.println(buffer.toString());
             cache.clear();
         }
     }
@@ -114,7 +121,11 @@ public class LogsToolkit {
             while (it.hasNext()) {
                 String param = it.next();
                 if (cache.get(preparing2).contains("?")) {
-                    cache.put(preparing2, cache.get(preparing2).replaceFirst("\\?", "'" + param + "'"));
+                    if ("null".equals(param)) {
+                        cache.put(preparing2, cache.get(preparing2).replaceFirst("\\?", "null"));
+                    } else {
+                        cache.put(preparing2, cache.get(preparing2).replaceFirst("\\?", "'" + param + "'"));
+                    }
                     it.remove();
                 }
             }
@@ -126,9 +137,13 @@ public class LogsToolkit {
                 buffer.append("注意：由于SQL中某一项参数中包含“, ”使其被解析成多个参数，导致最终多出部分参数: " + params.toString() + "\n");
             }
             buffer.append("------------------------------------------------------------------------\n");
-            // System.out.println(buffer.toString());
-            CurrentConsole.println(buffer.toString());
+            output.println(buffer.toString());
             cache.clear();
         }
     }
+
+    public static void setOutput(Output output) {
+        LogsToolkit.output = output;
+    }
+
 }
