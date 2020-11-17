@@ -70,10 +70,11 @@ public class LogsToolkit {
     private static void printMyBatisSql() {
         if (cache.get(preparing1) != null && cache.get(parameters1) != null) {
             String parameters = cache.get(parameters1);
-            if (parameters.endsWith(")")) {
+            List<String> params = new ArrayList<String>();
+            if (!"".equals(parameters)) {
                 parameters += ", ";
+                params.addAll(Arrays.asList(parameters.split("\\(\\w+\\), ")));
             }
-            List<String> params = new ArrayList<String>(Arrays.asList(parameters.split("\\(\\w+\\), ")));
 
             Iterator<String> it = params.iterator();
             while (it.hasNext()) {
@@ -103,8 +104,11 @@ public class LogsToolkit {
     private static void printIBatisSql() {
         if (cache.get(preparing2) != null && cache.get(parameters2) != null) {
             String parameters = cache.get(parameters2);
-            parameters = parameters.substring(1, parameters.length() - 1);
-            List<String> params = new ArrayList<String>(Arrays.asList(parameters.split(", ")));
+            parameters = parameters.substring(1, parameters.length() - 1).trim();
+            List<String> params = new ArrayList<String>();
+            if (!"".equals(parameters)) {
+                params.addAll(Arrays.asList(parameters.split(", ")));
+            }
 
             Iterator<String> it = params.iterator();
             while (it.hasNext()) {

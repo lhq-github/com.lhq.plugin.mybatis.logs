@@ -1,9 +1,9 @@
-
+https://download.csdn.net/download/sinat_23163657/13119327
 # ibatis、mybatis SQL参数拼接打印插件
 
 在控制台选择ibatis、mybatis输出的sql语句，按F9，自动拼接参数并输出完整的SQL语句。快捷键可以通过eclipse快捷键设置功能自行调整。    
 
-插件下载：[https://download.csdn.net/download/sinat_23163657/13115127](https://download.csdn.net/download/sinat_23163657/13115127)
+插件下载：[https://download.csdn.net/download/sinat_23163657/13119327](https://download.csdn.net/download/sinat_23163657/13119327)
 
 注意：
 
